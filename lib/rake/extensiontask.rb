@@ -447,24 +447,12 @@ Java extension should be preferred.
     end
 
     def make
-      unless @make
-        @make =
-          if RUBY_PLATFORM =~ /mswin/ then
-            'nmake'
-          else
-            ENV['MAKE'] || find_make
-          end
-      end
-
-      unless @make
-        raise "Couldn't find a suitable `make` tool. Use `MAKE` env to set an alternative."
-      end
-
-      @make
+      @make ||= ENV['MAKE'] || find_make
     end
 
     def find_make
       candidates = ["gmake", "make"]
+      candidates.unshift("nmake")  if RUBY_PLATFORM =~ /mswin/
       paths = (ENV["PATH"] || "").split(File::PATH_SEPARATOR)
 
       candidates.each do |candidate|
@@ -474,7 +462,7 @@ Java extension should be preferred.
         end
       end
 
-      nil
+      raise "Couldn't find a suitable `make` tool. Use `MAKE` env to set an alternative."
     end
 
     def compiled_files
