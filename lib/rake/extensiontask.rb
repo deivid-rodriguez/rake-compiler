@@ -451,7 +451,7 @@ Java extension should be preferred.
     end
 
     def find_make
-      candidates = ["gmake", "make"]
+      candidates = ["gmake", "make", "cmake"]
       candidates.unshift("nmake")  if RUBY_PLATFORM =~ /mswin/
       paths = (ENV["PATH"] || "").split(File::PATH_SEPARATOR)
 
